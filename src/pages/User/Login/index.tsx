@@ -13,7 +13,7 @@ import {history, useModel} from '@umijs/max';
 import {Alert, message, Tabs} from 'antd';
 import React, {useState} from 'react';
 import styles from './index.less';
-import {userLogin} from "@/services/winterapi-backend/userController";
+import {userLoginUsingPOST} from "@/services/winterapi-backend/userController";
 
 const LoginMessage: React.FC<{
   content: string;
@@ -36,7 +36,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.UserLoginRequest) => {
     try {
       // 登录
-      const res = await userLogin({
+      const res = await userLoginUsingPOST({
         ...values
       });
       if (res.data) {

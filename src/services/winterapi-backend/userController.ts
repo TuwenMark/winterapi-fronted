@@ -3,7 +3,7 @@
 import { request } from '@umijs/max';
 
 /** addUser POST /api/user/add */
-export async function addUser(body: API.UserAddRequest, options?: { [key: string]: any }) {
+export async function addUserUsingPOST(body: API.UserAddRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponselong>('/api/user/add', {
     method: 'POST',
     headers: {
@@ -15,10 +15,7 @@ export async function addUser(body: API.UserAddRequest, options?: { [key: string
 }
 
 /** deleteUser POST /api/user/delete */
-export async function deleteUser(
-  body: API.DeleteRequest,
-  options?: { [key: string]: any },
-) {
+export async function deleteUserUsingPOST(body: API.IdRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponseboolean>('/api/user/delete', {
     method: 'POST',
     headers: {
@@ -30,7 +27,7 @@ export async function deleteUser(
 }
 
 /** getUserById GET /api/user/get */
-export async function getUserById(
+export async function getUserByIdUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getUserByIdUsingGETParams,
   options?: { [key: string]: any },
@@ -45,7 +42,7 @@ export async function getUserById(
 }
 
 /** getLoginUser GET /api/user/get/login */
-export async function getLoginUser(options?: { [key: string]: any }) {
+export async function getLoginUserUsingGET(options?: { [key: string]: any }) {
   return request<API.BaseResponseUserVO>('/api/user/get/login', {
     method: 'GET',
     ...(options || {}),
@@ -53,7 +50,7 @@ export async function getLoginUser(options?: { [key: string]: any }) {
 }
 
 /** listUser GET /api/user/list */
-export async function listUser(
+export async function listUserUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.listUserUsingGETParams,
   options?: { [key: string]: any },
@@ -68,7 +65,7 @@ export async function listUser(
 }
 
 /** listUserByPage GET /api/user/list/page */
-export async function listUserByPage(
+export async function listUserByPageUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.listUserByPageUsingGETParams,
   options?: { [key: string]: any },
@@ -83,7 +80,7 @@ export async function listUserByPage(
 }
 
 /** userLogin POST /api/user/login */
-export async function userLogin(
+export async function userLoginUsingPOST(
   body: API.UserLoginRequest,
   options?: { [key: string]: any },
 ) {
@@ -98,7 +95,7 @@ export async function userLogin(
 }
 
 /** userLogout POST /api/user/logout */
-export async function userLogout(options?: { [key: string]: any }) {
+export async function userLogoutUsingPOST(options?: { [key: string]: any }) {
   return request<API.BaseResponseboolean>('/api/user/logout', {
     method: 'POST',
     ...(options || {}),
@@ -106,7 +103,7 @@ export async function userLogout(options?: { [key: string]: any }) {
 }
 
 /** userRegister POST /api/user/register */
-export async function userRegister(
+export async function userRegisterUsingPOST(
   body: API.UserRegisterRequest,
   options?: { [key: string]: any },
 ) {
@@ -121,7 +118,7 @@ export async function userRegister(
 }
 
 /** updateUser POST /api/user/update */
-export async function updateUser(
+export async function updateUserUsingPOST(
   body: API.UserUpdateRequest,
   options?: { [key: string]: any },
 ) {

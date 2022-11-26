@@ -15,10 +15,7 @@ export async function addPostUsingPOST(body: API.PostAddRequest, options?: { [ke
 }
 
 /** deletePost POST /api/post/delete */
-export async function deletePostUsingPOST(
-  body: API.DeleteRequest,
-  options?: { [key: string]: any },
-) {
+export async function deletePostUsingPOST(body: API.IdRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponseboolean>('/api/post/delete', {
     method: 'POST',
     headers: {
