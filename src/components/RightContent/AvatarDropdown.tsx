@@ -9,7 +9,7 @@ import React, {useCallback} from 'react';
 import {flushSync} from 'react-dom';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-import {userLogout} from "@/services/winterapi-backend/userController";
+import {userLogoutUsingPOST} from "@/services/winterapi-backend/userController";
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -44,7 +44,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         flushSync(() => {
           setInitialState((s) => ({ ...s, currentUser: undefined }));
         });
-        userLogout();
+        userLogoutUsingPOST();
         return;
       }
       history.push(`/account/${key}`);

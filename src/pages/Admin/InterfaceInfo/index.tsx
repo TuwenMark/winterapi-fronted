@@ -6,13 +6,13 @@ import {Button, Drawer, message} from 'antd';
 import React, {useRef, useState} from 'react';
 import {SortOrder} from "antd/es/table/interface";
 import {
-  addInterfaceInfo,
-  deleteInterfaceInfo,
-  listInterfaceInfoByPage,
-  updateInterfaceInfo
+  addInterfaceInfoUsingPOST,
+  deleteInterfaceInfoUsingPOST,
+  listInterfaceInfoByPageUsingGET, offlineInterfaceInfoUsingPOST, onlineInterfaceInfoUsingPOST,
+  updateInterfaceInfoUsingPOST
 } from "@/services/winterapi-backend/interfaceInfoController";
-import CreateModal from "@/pages/InterfaceInfo/components/CreateModal";
-import UpdateModal from "@/pages/InterfaceInfo/components/UpdateModal";
+import CreateModal from "@/pages/Admin/InterfaceInfo/components/CreateModal";
+import UpdateModal from "@/pages/Admin/InterfaceInfo/components/UpdateModal";
 
 const TableList: React.FC = () => {
   /**
@@ -38,7 +38,7 @@ const TableList: React.FC = () => {
   const handleAdd = async (fields: API.InterfaceInfo) => {
     const hide = message.loading('正在添加');
     try {
-      await addInterfaceInfo({
+      await addInterfaceInfoUsingPOST({
         ...fields,
       });
       hide();
@@ -61,7 +61,7 @@ const TableList: React.FC = () => {
   const handleUpdate = async (fields: API.InterfaceInfo) => {
     const hide = message.loading('修改中');
     try {
-      await updateInterfaceInfo({
+      await updateInterfaceInfoUsingPOST({
         id: fields.id,
         ...fields,
       });
@@ -76,8 +76,56 @@ const TableList: React.FC = () => {
   };
 
   /**
+   *  online interface
+   * @zh-CN 发布接口
+   *
+   * @param record
+   */
+  const handleOnline = async (record: API.IdRequest) => {
+    const hide = message.loading('发布中');
+    if (!record) return true;
+    try {
+      await onlineInterfaceInfoUsingPOST({
+        id: record.id,
+      });
+      hide();
+      message.success('发布成功！');
+      actionRef.current?.reload();
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error('发布失败：' + error.message);
+      return false;
+    }
+  };
+
+  /**
+   *  offline interface
+   * @zh-CN 下线接口
+   *
+   * @param record
+   */
+  const handleOffline = async (record: API.IdRequest) => {
+    const hide = message.loading('下线中');
+    if (!record) return true;
+    try {
+      await offlineInterfaceInfoUsingPOST({
+        id: record.id,
+      });
+      hide();
+      message.success('下线成功！');
+      actionRef.current?.reload();
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error('下线失败：' + error.message);
+      return false;
+    }
+  };
+
+  /**
    *  Delete node
-   * @zh-CN 删除节点
+   * @zh-CN 删除接口
    *
    * @param record
    */
@@ -85,7 +133,7 @@ const TableList: React.FC = () => {
     const hide = message.loading('正在删除');
     if (!record) return true;
     try {
-      await deleteInterfaceInfo({
+      await deleteInterfaceInfoUsingPOST({
         id: record.id,
       });
       hide();
@@ -206,14 +254,35 @@ const TableList: React.FC = () => {
         >
           修改
         </a>,
-        <a
+        record.status === 0 ? <Button
           key="config"
+          type={"text"}
+          onClick={() => {
+            handleOnline(record);
+          }}
+        >
+          发布
+        </Button> : null,
+        record.status === 1 ? <Button
+          key="config"
+          type={"text"}
+          danger
+          onClick={() => {
+            handleOffline(record);
+          }}
+        >
+          下线
+        </Button> : null,
+        <Button
+          key="config"
+          type={"text"}
+          danger
           onClick={() => {
             handleRemove(record);
           }}
         >
           删除
-        </a>,
+        </Button>,
       ],
     },
   ];
@@ -238,7 +307,7 @@ const TableList: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sort: Record<string, SortOrder>, filter: Record<string, React.ReactText[] | null>) => {
-          const res = await listInterfaceInfoByPage({
+          const res = await listInterfaceInfoByPageUsingGET({
             ...params
           });
           if (res.data) {

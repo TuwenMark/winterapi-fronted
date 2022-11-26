@@ -71,10 +71,6 @@ declare namespace API {
     message?: string;
   };
 
-  type DeleteRequest = {
-    id?: number;
-  };
-
   type getInterfaceInfoByIdUsingGETParams = {
     /** id */
     id?: number;
@@ -87,6 +83,10 @@ declare namespace API {
 
   type getUserByIdUsingGETParams = {
     /** id */
+    id?: number;
+  };
+
+  type IdRequest = {
     id?: number;
   };
 

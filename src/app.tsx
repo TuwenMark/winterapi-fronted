@@ -5,7 +5,7 @@ import {SettingDrawer} from '@ant-design/pro-components';
 import type {RunTimeLayoutConfig} from '@umijs/max';
 import {history, Link} from '@umijs/max';
 import {requestConfig} from './requestConfig';
-import {getLoginUser} from "@/services/winterapi-backend/userController";
+import {getLoginUserUsingGET} from "@/services/winterapi-backend/userController";
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -19,7 +19,7 @@ export async function getInitialState(): Promise<InitialState> {
     loginUser: undefined,
   }
   try {
-    const res = await getLoginUser();
+    const res = await getLoginUserUsingGET();
     if (res.data) {
       state.loginUser = res.data;
     }
