@@ -27,12 +27,12 @@ const TableList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.InterfaceInfo>();
+  const [selectedRowsState, setSelectedRows] = useState<API.InterfaceInfo[]>([]);
 
   /**
    * @en-US Add node
-   * @zh-CN 添加节点
+   * @zh-CN 新建接口
    * @param fields
    */
   const handleAdd = async (fields: API.InterfaceInfo) => {
@@ -54,15 +54,16 @@ const TableList: React.FC = () => {
 
   /**
    * @en-US Update node
-   * @zh-CN 更新节点
+   * @zh-CN 更新接口
    *
    * @param fields
    */
   const handleUpdate = async (fields: API.InterfaceInfo) => {
     const hide = message.loading('修改中');
+    console.log(currentRow);
     try {
       await updateInterfaceInfoUsingPOST({
-        id: fields.id,
+        id: currentRow?.id,
         ...fields,
       });
       hide();
@@ -81,7 +82,7 @@ const TableList: React.FC = () => {
    *
    * @param record
    */
-  const handleOnline = async (record: API.IdRequest) => {
+  const handleOnline = async (record: API.InterfaceInfo) => {
     const hide = message.loading('发布中');
     if (!record) return true;
     try {
@@ -105,7 +106,7 @@ const TableList: React.FC = () => {
    *
    * @param record
    */
-  const handleOffline = async (record: API.IdRequest) => {
+  const handleOffline = async (record: API.InterfaceInfo) => {
     const hide = message.loading('下线中');
     if (!record) return true;
     try {
@@ -156,7 +157,7 @@ const TableList: React.FC = () => {
     {
       title: 'id',
       dataIndex: 'id',
-      valueType: 'text',
+      valueType: 'index',
       formItemProps: {
         rules: [{
           required: true,
@@ -199,25 +200,30 @@ const TableList: React.FC = () => {
       }
     },
     {
+      title: '请求参数',
+      dataIndex: 'requestParams',
+      valueType: 'jsonCode',
+    },
+    {
       title: '请求头',
       dataIndex: 'requestHeader',
-      valueType: 'textarea',
+      valueType: 'jsonCode',
     },
     {
       title: '响应头',
       dataIndex: 'responseHeader',
-      valueType: 'textarea',
+      valueType: 'jsonCode',
     },
     {
       title: '状态',
       dataIndex: 'status',
       valueEnum: {
         0: {
-          text: '关闭',
+          text: '下线',
           status: 'Default',
         },
         1: {
-          text: '开启',
+          text: '正常',
           status: 'Processing',
         },
       },
@@ -288,7 +294,7 @@ const TableList: React.FC = () => {
   ];
   return (
     <PageContainer>
-      <ProTable<API.RuleListItem, API.PageParams>
+      <ProTable<API.InterfaceInfo, API.PageParams>
         headerTitle={'接口列表'}
         actionRef={actionRef}
         rowKey="key"
@@ -404,7 +410,7 @@ const TableList: React.FC = () => {
         closable={false}
       >
         {currentRow?.name && (
-          <ProDescriptions<API.RuleListItem>
+          <ProDescriptions<API.InterfaceInfo>
             column={2}
             title={currentRow?.name}
             request={async () => ({
@@ -413,7 +419,7 @@ const TableList: React.FC = () => {
             params={{
               id: currentRow?.name,
             }}
-            columns={columns as ProDescriptionsItemProps<API.RuleListItem>[]}
+            columns={columns as ProDescriptionsItemProps<API.InterfaceInfo>[]}
           />
         )}
       </Drawer>
